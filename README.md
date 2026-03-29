@@ -19,16 +19,47 @@ This simulation builds a content-based music recommender that scores songs by co
 
 Real-world recommenders like Spotify combine two strategies: **collaborative filtering** (if many listeners who love Song A also love Song B, recommend B to new fans of A) and **content-based filtering** (match a song's audio features directly to a user's stated or inferred taste profile). Collaborative filtering is powerful but requires massive behavioral data and fails for new songs with no listeners. Content-based filtering works immediately from audio attributes alone and produces explainable results. This simulation uses the content-based approach — scoring every song against a user profile and returning the closest matches — because transparency and simplicity matter more here than raw accuracy.
 
-### `Song` Features Used
+### Algorithm Recipe
+
+For each song in `songs.csv`, the system computes a score by applying the following rules:
+
+- Start with `score = 0`
+- `+2.0` points if the song's `genre` matches the user's `favorite_genre`
+- `+1.0` point if the song's `mood` matches the user's `favorite_mood`
+- Add an energy similarity score based on how close `song.energy` is to `target_energy`
+- Add an acousticness score to reward songs that match the user's acoustic preference
+
+A practical scoring formula is:
+
+```
+score = 2.0 * genre_match
+      + 1.0 * mood_match
+      + 1.5 * max(0, 1 - abs(song.energy - user.target_energy))
+      + 0.8 * acousticness_similarity
+```
+
+Where:
+- `genre_match` is `1` if the genre matches, otherwise `0`
+- `mood_match` is `1` if the mood matches, otherwise `0`
+- `acousticness_similarity` is a value between `0` and `1` that rewards a closer acousticness match
+
+### What gets scored
 
 | Feature | Type | Role in scoring |
 |---|---|---|
-| `genre` | Categorical | Primary gate — highest weight (0.35) |
-| `mood` | Categorical | Secondary gate — second weight (0.25) |
-| `energy` | Float 0–1 | Proximity score — rewards closeness to user target (0.25) |
-| `acousticness` | Float 0–1 | Texture match — rewards organic vs. electronic preference (0.15) |
+| `genre` | Categorical | Primary signal — highest weight |
+| `mood` | Categorical | Secondary signal — gives emotional context |
+| `energy` | Float 0–1 | Continuous similarity — refines intensity match |
+| `acousticness` | Float 0–1 | Texture preference — supports mellow vs. electronic |
 | `title`, `artist` | String | Display only, not used in scoring |
-| `tempo_bpm`, `valence`, `danceability` | Float | Available for future experiments; not in base score |
+
+### Output
+
+After scoring every song, the system sorts songs by total score in descending order and returns the top K recommendations. This creates a ranked list where the best matches to the user's taste profile appear first.
+
+### Potential bias
+
+This system might over-prioritize genre, ignoring great songs that match the user's mood, energy, or acoustic preference. Because categorical genre and mood matches are treated as strong binary signals, the recommender can miss nuance and under-represent songs that are a good fit in other ways.
 
 ### `UserProfile` Fields
 
@@ -38,19 +69,6 @@ Real-world recommenders like Spotify combine two strategies: **collaborative fil
 | `favorite_mood` | String | The emotional context the user is looking for |
 | `target_energy` | Float 0–1 | How intense or calm the user wants the music |
 | `likes_acoustic` | Bool | Whether the user prefers organic/acoustic over produced/electronic sound |
-
-### How Scores Are Computed
-
-Each song receives a score between 0.0 and 1.0:
-
-```
-score = 0.35 × (genre match)
-      + 0.25 × (mood match)
-      + 0.25 × (1 - |song.energy - user.target_energy|)
-      + 0.15 × (acousticness proximity)
-```
-
-Categorical matches are binary (1 if equal, 0 if not). Numerical features use inverted absolute difference so that closer values score higher. All songs are then sorted by score descending and the top-k are returned with an explanation of which features drove the result.
 
 ---
 
