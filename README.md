@@ -70,6 +70,49 @@ This system might over-prioritize genre, ignoring great songs that match the use
 | `target_energy` | Float 0–1 | How intense or calm the user wants the music |
 | `likes_acoustic` | Bool | Whether the user prefers organic/acoustic over produced/electronic sound |
 
+### Sample Output
+
+Running `python -m src.main` with the default pop/happy/energy-0.8 profile produces:
+
+```
+====================================================
+  Music Recommender — Top 5 for Your Taste Profile
+====================================================
+  Genre: pop  |  Mood: happy  |  Energy: 0.8
+====================================================
+
+  #1  Sunrise City  —  Neon Echo
+       Genre: pop  |  Mood: happy  |  Energy: 0.82
+       Score: 5.25
+       Why:   This track was recommended because it matches your favorite genre (pop), and matches your preferred mood (happy), and energy level is close to your target (0.82 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.18).
+
+  #2  Gym Hero  —  Max Pulse
+       Genre: pop  |  Mood: intense  |  Energy: 0.93
+       Score: 3.98
+       Why:   This track was recommended because it matches your favorite genre (pop), and energy level is close to your target (0.93 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.05).
+
+  #3  Rooftop Lights  —  Indigo Parade
+       Genre: indie pop  |  Mood: happy  |  Energy: 0.76
+       Score: 3.12
+       Why:   This track was recommended because it matches your preferred mood (happy), and energy level is close to your target (0.76 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.35).
+
+  #4  Basement Groove  —  The Funkytown Few
+       Genre: funk  |  Mood: uplifting  |  Energy: 0.79
+       Score: 2.21
+       Why:   This track was recommended because it energy level is close to your target (0.79 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.29).
+
+  #5  Night Drive Loop  —  Neon Echo
+       Genre: synthwave  |  Mood: moody  |  Energy: 0.75
+       Score: 2.21
+       Why:   This track was recommended because it energy level is close to your target (0.75 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.22).
+```
+
+**Why these results make sense:**
+- **#1 Sunrise City** hits all four features (genre + mood + energy + acousticness) → max score of 5.25
+- **#2 Gym Hero** shares the genre gate but misses on mood (intense vs happy) — still ranks high because energy and acousticness are strong matches
+- **#3 Rooftop Lights** compensates for a genre near-miss (indie pop ≠ pop) with a mood match and close energy
+- **#4 / #5** score identically (2.21) — neither matches genre or mood, but both sit close to the target energy and low-acousticness preference
+
 ---
 
 ## Getting Started
