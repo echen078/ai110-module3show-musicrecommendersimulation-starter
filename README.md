@@ -126,19 +126,20 @@ Running `python -m src.main` with the default pop/happy/energy-0.8 profile produ
    ```bash
    python -m venv .venv
    source .venv/bin/activate      # Mac or Linux
-   .venv\Scripts\activate         # Windows
+   .venv\Scripts\activate       # Windows
+   ```
 
-2. Install dependencies
+2. Install dependencies:
 
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 3. Run the app:
 
-```bash
-python -m src.main
-```
+   ```bash
+   python -m src.main
+   ```
 
 ### Running Tests
 
@@ -154,39 +155,29 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- Tested the default profiles in `src/main.py` for high-energy pop, chill lofi, and deep intense rock.
+- Checked whether the top 5 recommendations matched the requested genre, mood, and energy levels.
+- Verified that songs with matching genre and mood were ranked higher than songs that only matched energy.
+- Observed that the recommender still returned high-energy rock tracks for users who wanted sad or romantic moods when energy and genre were strong.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+- The catalog is very small (18 songs), so the system cannot represent many music tastes.
+- It does not use tempo, valence, danceability, artist, or lyrical meaning, which limits its emotional accuracy.
+- It can over-favor genre and energy, causing the model to ignore mood or subtle style preferences.
+- Rare or mixed preferences may be underrepresented, especially if the dataset has more chill and lofi examples.
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
+This project showed me how a simple scoring system can feel like a recommendation engine when the input features are clear. I learned that matching genre, mood, energy, and acousticness can produce useful top songs, but the model still misses nuance when it treats genre and energy as the strongest signals.
 
-[**Model Card**](model_card.md)
+I used AI tools as a writing and framing helper, especially to summarize the system and phrase the model card clearly. I still needed to double-check the actual code and dataset counts myself so the final description matched how the recommender really works.
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
+I was surprised that the system could feel plausible with just four features and a small catalog, but also that it can easily push users toward the same familiar sounds when the data is limited. If I kept developing it, I would add more songs, more audio features like tempo and valence, and make the scoring less binary so mood and texture matter more.
 
 ---
 
