@@ -61,7 +61,7 @@ Prompts:
 
 ## 6. Limitations and Bias 
 
-Where the system struggles or behaves unfairly. 
+This system has a few clear weaknesses. The dataset is small and skewed toward low-energy and lofi-style tracks, so the recommender can easily create a filter bubble by favoring those familiar sounds. The scoring logic also overweights energy proximity, which means users who want a specific mood like sad or romantic may still see high-energy songs ranked too high. Because genre and energy are treated as strong signals, the model can ignore more subtle user tastes and underrepresent users whose preferences do not fit the dominant catalog patterns.  
 
 Prompts:  
 
@@ -74,16 +74,7 @@ Prompts:
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
+I tested several user profiles, including a high-energy pop listener, a chill lofi listener, a deep intense rock listener, and adversarial edge cases like a sad rock profile and a high-energy lofi profile. I looked for whether the top recommendations matched the requested genre, mood, and energy, and I compared the default score weights against a version where energy was given twice as much importance and genre was halved. What surprised me was that the recommender still ranked high-energy rock tracks first for a sad rock profile, showing that the model prioritized energy and genre much more than mood. I also found that the current dataset and scoring can underrepresent users with rare mood/genre combinations because it favors the dominant catalog patterns rather than subtle taste signals.
 
 ---
 

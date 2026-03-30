@@ -25,18 +25,18 @@ class UserProfile:
     likes_acoustic: bool
 
 def score_song(song: Dict, user_prefs: Dict) -> float:
-    """Returns a weighted match score (0–5.3) for one song against a user preference dict."""
+    """Returns a weighted match score (0–5.8) for one song against a user preference dict."""
     score = 0.0
 
     # Categorical gates
     if song["genre"] == user_prefs.get("genre", ""):
-        score += 2.0
+        score += 1.0
     if song["mood"] == user_prefs.get("mood", ""):
         score += 1.0
 
     # Energy proximity: rewards songs close to the user's target intensity
     energy_sim = max(0.0, 1.0 - abs(song["energy"] - user_prefs.get("energy", 0.5)))
-    score += 1.5 * energy_sim
+    score += 3.0 * energy_sim
 
     # Acousticness proximity: differentiates organic vs. produced sound preference
     target_acousticness = user_prefs.get("acousticness", 0.75 if user_prefs.get("likes_acoustic") else 0.20)

@@ -15,7 +15,7 @@ from .recommender import load_songs, recommend_songs
 def main() -> None:
     songs = load_songs("data/songs.csv") 
 
-    # Taste profile: upbeat pop listener who wants high energy and a produced sound.
+    # Preset taste profiles for different listeners.
     # Four fields are required for the weighted scorer:
     #   genre       → categorical gate (weight 0.35) — strongest differentiator
     #   mood        → categorical gate (weight 0.25) — filters emotional context
@@ -24,12 +24,28 @@ def main() -> None:
     #   acousticness → float 0-1 (weight 0.15) — 0.2 signals preference for
     #                 produced/electronic sound, which separates rock/pop/synthwave
     #                 from lofi/jazz/classical even when energy is similar
-    user_prefs = {
+    high_energy_pop = {
         "genre": "pop",
         "mood": "happy",
         "energy": 0.8,
         "acousticness": 0.2,
     }
+
+    chill_lofi = {
+        "genre": "lofi",
+        "mood": "chill",
+        "energy": 0.4,
+        "acousticness": 0.8,
+    }
+
+    deep_intense_rock = {
+        "genre": "rock",
+        "mood": "intense",
+        "energy": 0.9,
+        "acousticness": 0.15,
+    }
+
+    user_prefs = high_energy_pop
 
     recommendations = recommend_songs(user_prefs, songs, k=5)
 

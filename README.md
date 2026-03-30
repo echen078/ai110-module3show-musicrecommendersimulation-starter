@@ -107,6 +107,8 @@ Running `python -m src.main` with the default pop/happy/energy-0.8 profile produ
        Why:   This track was recommended because it energy level is close to your target (0.75 vs 0.8), and sound texture fits your acoustic preference (acousticness 0.22).
 ```
 
+![Terminal output for edge-case profiles](Output.png)
+
 **Why these results make sense:**
 - **#1 Sunrise City** hits all four features (genre + mood + energy + acousticness) → max score of 5.25
 - **#2 Gym Hero** shares the genre gate but misses on mood (intense vs happy) — still ranks high because energy and acousticness are strong matches
